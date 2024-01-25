@@ -50,6 +50,18 @@ router.get('/users', (req, res) => {
        .catch(error => res.status(500).json(error))
  
  });
+
+  // CHANGE A USER
+ 
+  router.patch('/users/:id', (req, res) => {
+   const { id } = req.params;
+
+   Travels.upDateUser(id, req.body)
+      .then(user => {
+         res.status(200).json({ message: 'User updated' });
+      })
+      .catch(error => res.status(500).json(error))
+});
  
  // DELETE AN USER
  

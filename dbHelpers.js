@@ -19,7 +19,14 @@ async function addUser(user) {
 
 function findUserByUsername(username) {
     return db('users').where({ username:username }).first(); // SELECT * FROM users WHERE username = username 
-}           
+}   
+
+function upDateUser(id, newUser) {
+    return db('users')
+    .where({ id:id })
+    .update(newUser); // UPDATE destinations SET changes WHERE id = id;
+}
+        
 
 function removeUser(id) {
     return db('users').where({ id:id }).del(); // DELETE FROM users WHERE id = id; (returns 1 if deleted, -1 if not)
@@ -89,6 +96,7 @@ module.exports = {
     removeDestination,
     upDateDestination,
     getUserDestinations,
-    groupDestinations
+    groupDestinations,
+    upDateUser
 
 }

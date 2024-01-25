@@ -4,14 +4,17 @@
 
 const db = require('./dbConfig');
 
+// USERS
 
 function getAllUsers() {
     return db('users').orderBy('id', 'desc'); // SELECT * FROM users ORDER BY id DESC;
 }
 
 async function addUser(user) {
-    await db('users').insert(user); // INSERT INTO users VALUES (user);
-    return db('users').where({ username: user.username }); // SELECT * FROM users WHERE username = user.username;
+    // await db('users').insert(user); // INSERT INTO users VALUES (user);
+    // return db('users').where({ username: user.username }); // SELECT * FROM users WHERE username = user.username;
+
+    return db('users').insert(user, ['id', 'username']); // INSERT INTO users VALUES (user); RETURNING id, username;
 }
 
 function findUserByUsername(username) {
@@ -49,7 +52,7 @@ function getAllDestinations() {
 async function addDestination(newDestination) {
     await db('destinations')
     .where({ user_id: newDestination.user_id })
-    .insert(newDestination); // INSERT INTO destinations VALUES (newDestination);
+    .insert(newDestination, ['id']); // 
 }
 
 function removeDestination(id) {

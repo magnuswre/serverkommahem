@@ -13,7 +13,7 @@ exports.up = function(knex) {
   .createTable('destinations', tbl => {
     tbl.increments();
     tbl.text('title').notNullable().index();
-    tbl.text('description').notNullable;
+    tbl.text('description').notNullable();
     tbl.text('imageUrl').notNullable();
     tbl.timestamps(true, true);     
     tbl.integer('user_id')
@@ -32,5 +32,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('users').dropTableIfExists('destinations');
+  return knex.schema.dropTableIfExists('destinations').dropTableIfExists('users');
 };

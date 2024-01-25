@@ -44,9 +44,12 @@ function getUserDestinations(user_id) {
         'users.id as UserId', // alias 
         'users.imageUrl as UserImage', // alias
         'destinations.id as DestinationId', 
-        'destinations.title as DestinationTitle',)
-    .where({ user_id:user_id }); // SELECT users.id, users.imageUrl, destinations.id, destinations.title FROM users JOIN destinations ON users.id = destinations.user_id WHERE user_id = user_id;
-}  
+        'destinations.title as DestinationTitle',
+        'destinations.description as DestinationDescription', // added
+        'destinations.imageUrl as DestinationImage' // added
+    )
+    .where({ user_id:user_id });
+}
 
 
 // DESTINATIONS

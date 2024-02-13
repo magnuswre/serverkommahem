@@ -17,13 +17,12 @@ router.get('/users', (req, res) => {
  router.post('/users/register', (req, res) => {
     const credentials = req.body;
  
-    if (!credentials.username && credentials.password) {
-       res.status(400).json({ message: 'Please provide username and password' })
+    if (!credentials.email && credentials.password) {
+       res.status(400).json({ message: 'Please provide email and password' })
     }
  
     const hash = bcrypt.hashSync(credentials.password, 12)
     credentials.password = hash;
- 
  
     Travels.addUser(credentials)
        .then(user => {
@@ -31,7 +30,7 @@ router.get('/users', (req, res) => {
        })
        .catch(error => {
           if(error.errno === 19) {
-             res.status(400).json({ message: 'Username already exists' })
+             res.status(400).json({ message: 'account with that email already exists' })
           } else {
              res.status(500).json(error)
           }
@@ -41,9 +40,9 @@ router.get('/users', (req, res) => {
  // GET USER BY USERNAME
  
  router.get('/users/:username', (req, res) => {
-    const { username } = req.params;
+    const { email } = req.params;
  
-    Travels.findUserByUsername(username)
+    Travels.findUserByUserEmail(email)
        .then(user => {
           res.status(200).json(user);
        })
@@ -83,9 +82,9 @@ router.get('/users', (req, res) => {
  // LOGIN WITH AN EXISTING USER
  
  router.post('/users/login', (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
  
-    Travels.findUserByUsername(username, password)
+    Travels.findUserByUsername(email, password)
        .then(user => {
           if (user && bcrypt.compareSync(password, user.password)) {
              res.status(200).json(user)

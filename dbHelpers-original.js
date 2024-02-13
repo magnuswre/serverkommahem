@@ -14,11 +14,11 @@ async function addUser(user) {
     // await db('users').insert(user); // INSERT INTO users VALUES (user);
     // return db('users').where({ username: user.username }); // SELECT * FROM users WHERE username = user.username;
 
-    return db('users').insert(user, ['id', 'email']); // INSERT INTO users VALUES (user); RETURNING id, email;
+    return db('users').insert(user, ['id', 'username']); // INSERT INTO users VALUES (user); RETURNING id, username;
 }
 
-function findUserByEmail(email) {
-    return db('users').where({ email:email }).first(); // SELECT * FROM users WHERE email = email 
+function findUserByUsername(username) {
+    return db('users').where({ username:username }).first(); // SELECT * FROM users WHERE username = username 
 }   
 
 function upDateUser(id, newUser) {
@@ -91,7 +91,7 @@ function groupDestinations() {
 module.exports = {
     getAllUsers,
     addUser,
-    findUserByEmail,
+    findUserByUsername,
     removeUser,
     getAllDestinations,
     findUserById,

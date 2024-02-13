@@ -1,3 +1,5 @@
+const auth = require('../authentication/auth');
+
 const express = require('express');
 const router = express.Router();
 const Travels = require('../dbHelpers');

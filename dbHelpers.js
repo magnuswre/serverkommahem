@@ -42,11 +42,11 @@ function getUserDestinations(user_id) {
     .join('destinations', 'users.id', 'destinations.user_id')
     .select(
         'users.id as UserId', // alias 
-        'users.imageUrl as UserImage', // alias
+        'users.phone as UserPhone', // alias
         'destinations.id as DestinationId', 
-        'destinations.title as DestinationTitle',
-        'destinations.description as DestinationDescription', // added
-        'destinations.imageUrl as DestinationImage' // added
+        'destinations.enddestination as EndDestination',
+        'destinations.traveldate as DestinationTravelDate', // added
+        'destinations.seats as DestinationSeats' // added
     )
     .where({ user_id:user_id });
 }
@@ -79,13 +79,11 @@ function upDateDestination(id, newDestination) {
 // GROUPING
 
 function groupDestinations() {
-  return db('destinations').count() // SELECT COUNT(*) FROM destinations;
-  .groupBy('enddestination') // SELECT * FROM destinations GROUP BY title;
-  .select(
-    'destinations.id', 
-    'destinations.enddestination', 
-  )
-}
+    return db('destinations')
+      .count()
+      .groupBy('enddestination')
+      .select('destinations.id', 'destinations.enddestination');
+  }
 
 module.exports = {
     getAllUsers,

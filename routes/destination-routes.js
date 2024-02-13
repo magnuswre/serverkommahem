@@ -25,8 +25,8 @@ router.get('/destinations', (req, res) => {
           if (!user) {
              res.status(404).json({ message: 'User not found' })
           } else {
-             if (!newDestination.title || !newDestination.description) {
-                res.status(400).json({ message: 'Please provide title and description' })
+             if (!newDestination.enddestination || !newDestination.traveldate) {
+                res.status(400).json({ message: 'Please provide an End destination and traveldate' })
              } else {
                 Travels.addDestination(newDestination)
                    .then(destination => {

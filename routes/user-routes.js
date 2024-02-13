@@ -37,9 +37,9 @@ router.get('/users', (req, res) => {
        })
  });
  
- // GET USER BY USERNAME
+ // GET USER BY EMAIL
  
- router.get('/users/:username', (req, res) => {
+ router.get('/users/:email', (req, res) => {
     const { email } = req.params;
  
     Travels.findUserByUserEmail(email)
@@ -84,7 +84,7 @@ router.get('/users', (req, res) => {
  router.post('/users/login', (req, res) => {
     const { email, password } = req.body;
  
-    Travels.findUserByUsername(email, password)
+    Travels.findUserByEmail(email, password)
        .then(user => {
           if (user && bcrypt.compareSync(password, user.password)) {
              res.status(200).json(user)

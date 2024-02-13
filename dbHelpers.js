@@ -58,7 +58,6 @@ function getAllDestinations() {
     return db('destinations').orderBy('id', 'desc'); // SELECT * FROM destinations ORDER BY id DESC;
 }
 
-
 async function addDestination(newDestination) {
     await db('destinations')
     .where({ user_id: newDestination.user_id })
@@ -79,14 +78,14 @@ function upDateDestination(id, newDestination) {
 
 // GROUPING
 
-function groupDestinations() {
-  return db('destinations').count() // SELECT COUNT(*) FROM destinations;
-  .groupBy('title') // SELECT * FROM destinations GROUP BY title;
-  .select(
-    'destinations.id', 
-    'destinations.title', 
-  )
-}
+// function groupDestinations() {
+//   return db('destinations').count() // SELECT COUNT(*) FROM destinations;
+//   .groupBy('title') // SELECT * FROM destinations GROUP BY title;
+//   .select(
+//     'destinations.id', 
+//     'destinations.title', 
+//   )
+// }
 
 module.exports = {
     getAllUsers,

@@ -78,14 +78,14 @@ function upDateDestination(id, newDestination) {
 
 // GROUPING
 
-// function groupDestinations() {
-//   return db('destinations').count() // SELECT COUNT(*) FROM destinations;
-//   .groupBy('title') // SELECT * FROM destinations GROUP BY title;
-//   .select(
-//     'destinations.id', 
-//     'destinations.title', 
-//   )
-// }
+function groupDestinations() {
+  return db('destinations').count() // SELECT COUNT(*) FROM destinations;
+  .groupBy('enddestination') // SELECT * FROM destinations GROUP BY title;
+  .select(
+    'destinations.id', 
+    'destinations.enddestination', 
+  )
+}
 
 module.exports = {
     getAllUsers,

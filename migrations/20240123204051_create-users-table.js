@@ -15,9 +15,9 @@ exports.up = function(knex) {
   .createTable('destinations', tbl => {
     tbl.increments();
     // tbl.text('title').notNullable().index();
-    // tbl.text('description').notNullable();
     tbl.text('enddestination').notNullable().index();
     tbl.text('traveldate').notNullable();
+    tbl.text('arrivalTime').notNullable();
     tbl.text('seats').notNullable();
     tbl.timestamps(true, true);     
     tbl.integer('user_id')

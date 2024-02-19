@@ -76,6 +76,14 @@ function upDateDestination(id, newDestination) {
     .update(newDestination); // UPDATE destinations SET changes WHERE id = id;
 }
 
+function getDestinationByDate(traveldate) {
+    const formattedDate = new Date(traveldate).toJSON();
+    
+    return db('destinations')
+        .where({ traveldate: formattedDate })
+        .orderBy('traveldate', 'asc');
+}
+
 // GROUPING
 
 function groupDestinations() {
@@ -97,6 +105,7 @@ module.exports = {
     upDateDestination,
     getUserDestinations,
     groupDestinations,
-    upDateUser
+    upDateUser,
+    getDestinationByDate
 
 }

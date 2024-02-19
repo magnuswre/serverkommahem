@@ -69,6 +69,21 @@ router.get('/destinations', (req, res) => {
        })
        .catch(error => res.status(500).json(error))
  });
+
+// GET DESTINATION BY DATE
+
+ router.get('/destinations/:traveldate', (req, res) => {
+   const { traveldate } = req.params;
+   console.log(traveldate);
+
+   Travels.getDestinationByDate(traveldate)
+      .then(destination => {
+         res.status(200).json(destination);
+      })
+      .catch(error => res.status(500).json(error));
+});
+
+
  
  // GROUPING BY DESTINATIONS (GET ALL DESTINATIONS WITH THE SAME NAME)
  

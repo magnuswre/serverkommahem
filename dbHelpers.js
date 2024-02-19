@@ -77,10 +77,8 @@ function upDateDestination(id, newDestination) {
 }
 
 function getDestinationByDate(traveldate) {
-    const formattedDate = new Date(traveldate).toJSON();
-    
     return db('destinations')
-        .where({ traveldate: formattedDate })
+        .where({ traveldate })
         .orderBy('traveldate', 'asc');
 }
 

@@ -11,8 +11,6 @@ function getAllUsers() {
 }
 
 async function addUser(user) {
-    // await db('users').insert(user); // INSERT INTO users VALUES (user);
-    // return db('users').where({ username: user.username }); // SELECT * FROM users WHERE username = user.username;
 
     return db('users').insert(user, ['id', 'email']); // INSERT INTO users VALUES (user); RETURNING id, email;
 }

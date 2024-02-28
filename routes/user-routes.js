@@ -3,19 +3,10 @@ const express = require('express');
 const router = express.Router();
 const Travels = require('../dbHelpers');
 const bcrypt = require('bcryptjs');
-const auth = require('../authentication/auth');
+// const auth = require('../authentication/auth');
 
 
 // GET ALL USERS
-router.get('/users', (req, res) => {
-   Travels.getAllUsers()
-      .then(users => {
-         res.status(200).json(users);
-      })
-      .catch(error => res.status(500).json(error))
-});
-
-// CREATE A NEW USER
 router.post('/users/register', async (req, res) => {
    try {
       const credentials = req.body;
@@ -27,11 +18,11 @@ router.post('/users/register', async (req, res) => {
       const hash = bcrypt.hashSync(credentials.password, 12);
       credentials.password = hash;
 
+      // Assuming addUser returns the inserted user
       const user = await Travels.addUser(credentials);
 
       if (user) {
-         const token = auth.generateTokenUser(user);
-         return res.status(201).json({ token });
+         return res.status(201).json({ message: 'User added successfully' });
       } else {
          return res.status(500).json({ message: 'User was not added successfully' });
       }

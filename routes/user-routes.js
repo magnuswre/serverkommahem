@@ -5,8 +5,18 @@ const Travels = require('../dbHelpers');
 const bcrypt = require('bcryptjs');
 // const auth = require('../authentication/auth');
 
-
 // GET ALL USERS
+router.get('/users', (req, res) => {
+   Travels.getAllUsers()
+      .then(users => {
+         res.status(200).json(users);
+      })
+      .catch(error => res.status(500).json(error))
+});
+
+
+
+// CREATE A USER
 router.post('/users/register', async (req, res) => {
    try {
       const credentials = req.body;

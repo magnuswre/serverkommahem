@@ -16,28 +16,32 @@ router.get('/users', (req, res) => {
 });
 
 // CREATE A NEW USER
-router.post('/users/register', (req, res) => {
-   const credentials = req.body;
+router.post('/users/register', async (req, res) => {
+   try {
+      const credentials = req.body;
 
-   if (!credentials.email && credentials.password) {
-      res.status(400).json({ message: 'Please provide email and password' })
-   }
+      if (!credentials.email || !credentials.password) {
+         return res.status(400).json({ message: 'Please provide email and password' });
+      }
 
-   const hash = bcrypt.hashSync(credentials.password, 12)
-   credentials.password = hash;
+      const hash = bcrypt.hashSync(credentials.password, 12);
+      credentials.password = hash;
 
-   Travels.addUser(credentials)
-      .then(user => {
+      const user = await Travels.addUser(credentials);
+
+      if (user) {
          const token = auth.generateTokenUser(user);
-         res.status(201).json({ token });
-      })
-      .catch(error => {
-         if (error.errno === 19) {
-            res.status(400).json({ message: 'account with that email already exists' })
-         } else {
-            res.status(500).json(error)
-         }
-      })
+         return res.status(201).json({ token });
+      } else {
+         return res.status(500).json({ message: 'User was not added successfully' });
+      }
+   } catch (error) {
+      if (error.errno === 19) {
+         return res.status(400).json({ message: 'Account with that email already exists' });
+      } else {
+         return res.status(500).json(error);
+      }
+   }
 });
 
 // GET USER BY EMAIL

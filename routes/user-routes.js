@@ -103,6 +103,8 @@ router.delete('/users/:id', (req, res) => {
 //       .catch(error => res.status(500).json(error))
 // })
 
+// LOGIN WITH AN EXISTING USER
+
 router.post('/users/login', async (req, res) => {
    const { email, password } = req.body;
  
@@ -123,7 +125,6 @@ router.post('/users/login', async (req, res) => {
  
      // 4. Sign the JWT using your secret key and set options (e.g., expiration time)
      const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1h' }); // Change '1h' to your desired expiration
-      console.log(token)
      // 5. Send the JWT token back to the client
      res.status(200).json({ token });
    } catch (error) {

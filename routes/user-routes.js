@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Travels = require('../dbHelpers');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 // const auth = require('../authentication/auth');
 
 // GET ALL USERS
@@ -89,19 +90,50 @@ router.delete('/users/:id', (req, res) => {
 
 // LOGIN WITH AN EXISTING USER
 
-router.post('/users/login', (req, res) => {
-   const { email, password } = req.body;
+// router.post('/users/login', (req, res) => {
+//    const { email, password } = req.body;
 
-   Travels.findUserByEmail(email, password)
-      .then(user => {
-         if (user && bcrypt.compareSync(password, user.password)) {
-            res.status(200).json(user)
-         } else {
-            res.status(401).json({ message: 'User with that password does not exist' })
-         }
-      })
-      .catch(error => res.status(500).json(error))
-})
+//    Travels.findUserByEmail(email, password)
+//       .then(user => {
+//          if (user && bcrypt.compareSync(password, user.password)) {
+//             res.status(200).json(user)
+//          } else {
+//             res.status(401).json({ message: 'User with that password does not exist' })
+//          }
+//       })
+//       .catch(error => res.status(500).json(error))
+// })
+
+router.post('/users/login', async (req, res) => {
+   const { email, password } = req.body;
+ 
+   try {
+     // 1. Find user by email
+     const user = await Travels.findUserByEmail(email);
+ 
+     // 2. Check if user exists and password matches (using bcrypt)
+     if (!user || !bcrypt.compareSync(password, user.password)) {
+       return res.status(401).json({ message: 'Invalid email or password' });
+     }
+ 
+     // 3. Create JWT payload (including user ID and other relevant data)
+     const payload = {
+       userId: user.id,
+       // Add other relevant user information if needed (e.g., roles)
+     };
+ 
+     // 4. Sign the JWT using your secret key and set options (e.g., expiration time)
+     const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1h' }); // Change '1h' to your desired expiration
+ 
+     // 5. Send the JWT token back to the client
+     res.status(200).json({ token });
+   } catch (error) {
+     console.error(error);
+     res.status(500).json({ message: 'Internal server error' });
+   }
+ });
+
+
 
 //  // GET DESTINATION BY DATE
 

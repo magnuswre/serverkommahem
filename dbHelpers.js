@@ -11,7 +11,6 @@ function getAllUsers() {
 }
 
 async function addUser(user) {
-
     return db('users').insert(user, ['id', 'email']); // INSERT INTO users VALUES (user); RETURNING id, email;
 }
 
@@ -24,7 +23,6 @@ function upDateUser(id, newUser) {
     .where({ id:id })
     .update(newUser); // UPDATE destinations SET changes WHERE id = id;
 }
-        
 
 function removeUser(id) {
     return db('users').where({ id:id }).del(); // DELETE FROM users WHERE id = id; (returns 1 if deleted, -1 if not)

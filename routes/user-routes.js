@@ -30,7 +30,7 @@ router.post('/users/register', async (req, res) => {
 
       // Assuming addUser returns the inserted user
       const user = await Travels.addUser(credentials);
-
+      //hej
       if (user) {
          // Generate a JSON Web Token (JWT) for authentication
          const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: '1d' }); // Expires in 1 day

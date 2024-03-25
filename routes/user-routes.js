@@ -27,11 +27,10 @@ router.post('/users/register', async (req, res) => {
       const hash = bcrypt.hashSync(credentials.password, 12);
       credentials.password = hash;
 
-      // Assuming addUser returns the inserted user
       const user = await Travels.addUser(credentials);
 
       if (user) {
-         return res.status(201).json({ message: 'User added successfully' });
+         return res.status(201).json({ user, message: 'User added successfully' });
       } else {
          return res.status(500).json({ message: 'User was not added successfully' });
       }

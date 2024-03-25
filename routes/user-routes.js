@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const Travels = require('../dbHelpers');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
 // GET ALL USERS
 router.get('/users', (req, res) => {
@@ -30,25 +29,19 @@ router.post('/users/register', async (req, res) => {
 
       // Assuming addUser returns the inserted user
       const user = await Travels.addUser(credentials);
-      //hej
+
       if (user) {
-         // Generate a JSON Web Token (JWT) for authentication
-         const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: '1d' }); // Expires in 1 day
-   
-         return res.status(201).json({
-           message: 'User added successfully',
-           token,
-         });
-       } else {
+         return res.status(201).json({ message: 'User added successfully' });
+      } else {
          return res.status(500).json({ message: 'User was not added successfully' });
-       }
-     } catch (error) {
-       if (error.errno === 19) { // Assuming this indicates a duplicate email error
+      }
+   } catch (error) {
+      if (error.errno === 19) {
          return res.status(400).json({ message: 'Account with that email already exists' });
-       } else {
+      } else {
          return res.status(500).json(error);
-       }
-       }
+      }
+   }
 });
 
 // GET USER BY EMAIL

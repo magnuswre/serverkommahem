@@ -11,7 +11,7 @@ function getAllUsers() {
 }
 
 async function addUser(user) {
-    return db('users').insert(user, ['id', 'email']); // INSERT INTO users VALUES (user); RETURNING id, email;
+    return db('users').insert(user, ['id', 'email', 'phone']); // INSERT INTO users VALUES (user); RETURNING id, email, phone;
 }
 
 function findUserByEmail(email) {

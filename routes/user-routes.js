@@ -3,7 +3,8 @@ const express = require('express');
 const router = express.Router();
 const Travels = require('../dbHelpers');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
+const auth = require('../authentication/auth');
 
 // GET ALL USERS
 router.get('/users', (req, res) => {
@@ -30,9 +31,9 @@ router.post('/users/register', async (req, res) => {
 
       // Assuming addUser returns the inserted user
       const user = await Travels.addUser(credentials);
-
+      
       if (user) {
-         return res.status(201).json({ user, message: 'User added successfully' });
+         return res.status(201).json({ token: auth.generateTokenUser(user) });
       } else {
          return res.status(500).json({ message: 'User was not added successfully' });
       }

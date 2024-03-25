@@ -29,6 +29,7 @@ router.post('/users/register', async (req, res) => {
       credentials.password = hash;
 
       const user = await Travels.addUser(credentials);
+      console.log(user);
 
       if (user) {
          const token = auth.generateTokenUser(user);

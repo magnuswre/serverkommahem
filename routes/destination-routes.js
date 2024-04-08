@@ -70,18 +70,32 @@ router.get('/destinations', (req, res) => {
        .catch(error => res.status(500).json(error))
  });
 
-// GET DESTINATION BY DATE
-
- router.get('/destinations/:traveldate', (req, res) => {
+ // GET DESTINATION BY DATE
+router.get('/destinations/:traveldate?', (req, res) => {
    const { traveldate } = req.params;
-   console.log(traveldate);
 
-   Travels.getDestinationByDate(traveldate)
+   // Check if a specific travel date is provided, otherwise default to current date
+   const queryDate = traveldate ? traveldate : getCurrentDate();
+
+   Travels.getDestinationsByDate(queryDate)
       .then(destination => {
          res.status(200).json(destination);
       })
       .catch(error => res.status(500).json(error));
 });
+
+// // GET DESTINATION BY DATE
+
+//  router.get('/destinations/:traveldate', (req, res) => {
+//    const { traveldate } = req.params;
+//    console.log(traveldate);
+
+//    Travels.getDestinationByDate(traveldate)
+//       .then(destination => {
+//          res.status(200).json(destination);
+//       })
+//       .catch(error => res.status(500).json(error));
+// });
 
 
  

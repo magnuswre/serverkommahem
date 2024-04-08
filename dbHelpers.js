@@ -72,9 +72,25 @@ function upDateDestination(id, newDestination) {
     .update(newDestination); // UPDATE destinations SET changes WHERE id = id;
 }
 
-function getDestinationByDate(traveldate) {
+// function getCurrentDate() {
+//     return new Date();
+// }
+
+// function getDestinationByDate(traveldate) {
+//     return db('destinations')
+//         .where({ traveldate })
+//         .orderBy('traveldate', 'asc');
+// }
+
+
+function getDestinationsByDate(travelDate) {
+    if (!travelDate) {
+        // If no travelDate is provided, default to current date
+        travelDate = getCurrentDate();
+    }
+    
     return db('destinations')
-        .where({ traveldate })
+        .where('traveldate', travelDate)
         .orderBy('traveldate', 'asc');
 }
 
@@ -100,6 +116,6 @@ module.exports = {
     getUserDestinations,
     groupDestinations,
     upDateUser,
-    getDestinationByDate
+    getDestinationsByDate
 
 }

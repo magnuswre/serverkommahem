@@ -6,7 +6,7 @@ const Travels = require('../dbHelpers');
 
 // GET ALL DESTINATIONS
 
-router.get('/destinations', (req, res) => {
+router.get('/destinations/all', (req, res) => {
     Travels.getAllDestinations()
        .then(destinations => {
           res.status(200).json(destinations);

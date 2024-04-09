@@ -84,18 +84,18 @@ router.get('/destinations/:traveldate?', (req, res) => {
       .catch(error => res.status(500).json(error));
 });
 
-// // GET DESTINATION BY DATE
+// // GET DESTINATION BY CHOSEN DATE
 
-//  router.get('/destinations/:traveldate', (req, res) => {
-//    const { traveldate } = req.params;
-//    console.log(traveldate);
+ router.get('/destinations/chosen/:traveldate', (req, res) => {
+   const { traveldate } = req.params;
+   console.log(traveldate);
 
-//    Travels.getDestinationByDate(traveldate)
-//       .then(destination => {
-//          res.status(200).json(destination);
-//       })
-//       .catch(error => res.status(500).json(error));
-// });
+   Travels.getDestinationByDate(traveldate)
+      .then(destination => {
+         res.status(200).json(destination);
+      })
+      .catch(error => res.status(500).json(error));
+});
 
 
  

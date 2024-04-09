@@ -87,10 +87,10 @@ router.get('/destinations/:traveldate?', (req, res) => {
 // // GET DESTINATION BY CHOSEN DATE
 
 router.get('/destinations/chosen/:date', (req, res) => {
-   const { traveldate } = req.params;
-   console.log(traveldate);
+   const { date } = req.params;
+   console.log(date);
  
-   Travels.getDestinationByDate(traveldate)
+   Travels.getDestinationByDate(date)
      .then(destination => {
        if (!destination) {
          res.status(404).json({ message: 'No destination found for this date' });

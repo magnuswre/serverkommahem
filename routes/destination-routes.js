@@ -86,7 +86,7 @@ router.get('/destinations/:traveldate?', (req, res) => {
 
 // // GET DESTINATION BY CHOSEN DATE
 
-router.get('/destinations/chosen/:traveldate', (req, res) => {
+router.get('/destinations/chosen/:date', (req, res) => {
    const { traveldate } = req.params;
    console.log(traveldate);
  

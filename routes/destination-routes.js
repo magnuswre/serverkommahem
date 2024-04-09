@@ -86,16 +86,19 @@ router.get('/destinations/:traveldate?', (req, res) => {
 
 // // GET DESTINATION BY CHOSEN DATE
 
- router.get('/destinations/chosen/:traveldate', (req, res) => {
+router.get('/destinations/chosen/:traveldate', (req, res) => {
    const { traveldate } = req.params;
    console.log(traveldate);
-
+ 
    Travels.getDestinationByDate(traveldate)
-      .then(destination => {
-         res.status(200).json(destination);
-      })
-      .catch(error => res.status(500).json(error));
-});
+     .then(destination => {
+       res.status(200).json(destination);
+     })
+     .catch(error => {
+       console.error(error);
+       res.status(500).json({ message: 'Internal server error', error: error.message });
+     });
+ });
 
 
  

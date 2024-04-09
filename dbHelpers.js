@@ -72,16 +72,6 @@ function upDateDestination(id, newDestination) {
     .update(newDestination); // UPDATE destinations SET changes WHERE id = id;
 }
 
-// function getCurrentDate() {
-//     return new Date();
-// }
-
-// function getDestinationByDate(traveldate) {
-//     return db('destinations')
-//         .where({ traveldate })
-//         .orderBy('traveldate', 'asc');
-// }
-
 
 function getDestinationsByDate(travelDate) {
     if (!travelDate) {

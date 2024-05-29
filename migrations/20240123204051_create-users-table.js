@@ -2,29 +2,53 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema.createTable('users', tbl => {
-    tbl.increments(); // primary key, called 'id' and make it auto-incremen
-    tbl.text('email', 120).notNullable().unique().index();  
-    tbl.text('password', 200).notNullable(); // 200 is the max length
-    tbl.text('phone', 128).notNullable(); // 128 is the max length
-    tbl.timestamps(true, true); // adds created_at and updated_at columns
-  })
-  .createTable('destinations', tbl => {
     tbl.increments();
-    tbl.text('enddestination').notNullable().index();
-    tbl.text('traveldate').notNullable();
-    tbl.text('arrivalTime').notNullable();
-    tbl.text('seats').notNullable();
-    tbl.timestamps(true, true);     
-    tbl.integer('user_id')
-      .notNullable()
-      .unsigned()
-      .references('id')
-      .inTable('users')
-      .onDelete('CASCADE') // CASCADE, RESTRICT, DO NOTHING, SET NULL
-      .onUpdate('CASCADE');
+    tbl.text('email', 120).notNullable().unique().index();
+    tbl.text('password', 200).notNullable();
+    tbl.text('phone', 128).notNullable();
+    tbl.timestamps(true, true);
   })
+    .createTable('destinations', tbl => {
+      tbl.increments();
+      tbl.text('enddestination').notNullable().index();
+      tbl.text('traveldate').notNullable();
+      tbl.text('arrivalTime').notNullable();
+      tbl.integer('seats').notNullable();
+      tbl.timestamps(true, true);
+      tbl.integer('user_id')
+        .notNullable()
+        .unsigned()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE');
+    })
+    .createTable('timetable', tbl => {
+      tbl.increments('id');
+      tbl.date('date').notNullable();
+      tbl.time('arrival_time').notNullable();
+      tbl.time('departure_time').notNullable();
+      tbl.text('route').notNullable();
+      tbl.integer('IDENT').notNullable();
+      tbl.index(['date', 'arrival_time', 'departure_time', 'route', 'IDENT']);
+    })
+    .createTable('bookings', tbl => {
+      tbl.increments();
+      tbl.text('enddestination').notNullable();
+      tbl.text('traveldate').notNullable();
+      tbl.integer('seats').notNullable();
+      tbl.text('arrivalTime').notNullable();
+      tbl.integer('destinationId').notNullable()
+      tbl.integer('user_id')
+        .unsigned()
+        .references('id')
+        .inTable('destinations')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE');
+      tbl.timestamps(true, true);
+    });
 };
 
 
@@ -32,6 +56,12 @@ exports.up = function(knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('destinations').dropTableIfExists('users');
+
+exports.down = function (knex) {
+  return Promise.all([
+    knex.schema.dropTableIfExists('destinations'),
+    knex.schema.dropTableIfExists('users'),
+    knex.schema.dropTableIfExists('timetable'),
+    knex.schema.dropTableIfExists('bookings')
+  ]);
 };

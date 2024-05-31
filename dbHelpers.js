@@ -117,24 +117,37 @@ function groupDestinations() {
 //         .orderBy('traveldate', 'asc');
 // }
 
-function getDestinationsByDateNameSeatsAndArrivalTime(traveldate, enddestination, seats, arrivalTime) {
+// async function getDestinationsByDateNameSeatsAndArrivalTime(traveldate, enddestination, seats, arrivalTime) {
+//     return db('destinations')
+//         .where('traveldate', traveldate)
+//         .andWhere('enddestination', 'like', `%${enddestination}%`)
+//         .andWhere('seats', '>=', seats)
+//         .andWhere('arrivalTime', arrivalTime)
+//         .orderBy('traveldate', 'asc');
+// }
+
+async function getDestinationsByDateNameSeatsAndRoute(traveldate, enddestination, seats, arrival_time, departure_time, route) {
     return db('destinations')
+        .join('users', 'destinations.user_id', '=', 'users.id')
+        .select('destinations.*', 'users.email as userEmail', 'users.phone as userPhone')
         .where('traveldate', traveldate)
         .andWhere('enddestination', 'like', `%${enddestination}%`)
         .andWhere('seats', '>=', seats)
-        .andWhere('arrivalTime', arrivalTime)
+        .andWhere('arrival_time', arrival_time)
+        .andWhere('departure_time', departure_time)
+        .andWhere('route', route)
         .orderBy('traveldate', 'asc');
 }
-async function getArrivalTimesByDateAndDestination(date, destination) {
+
+async function getRoutesByDateAndDestination(date, destination) {
     const arrivalTimes = await db('destinations')
         .where('traveldate', date)
         .andWhere('enddestination', 'like', `%${destination}%`)
-        .select('arrivalTime')
-        .orderBy('arrivalTime', 'asc');
+        .select('id', 'traveldate as date', 'arrival_time', 'departure_time', 'route')
+        .orderBy('arrival_time', 'asc');
     return arrivalTimes.filter((arrivalTime, index, self) => index === self.findIndex((t) => (
-        t.arrivalTime === arrivalTime.arrivalTime
-    ))
-    );
+        t.arrival_time === arrivalTime.arrival_time
+    )));
 }
 
 async function createBooking(booking) {
@@ -144,12 +157,15 @@ async function createBooking(booking) {
 
 async function getAllBookingsForAnUser(user_id) {
     return db('bookings')
-        .join('users', 'bookings.user_id', 'users.id')
-        .join('destinations', 'bookings.destinationId', 'destinations.id')
+        .join('users as passenger', 'bookings.user_id', '=', 'passenger.id')
+        .join('destinations', 'bookings.destinationId', '=', 'destinations.id')
+        .join('users as driver', 'destinations.user_id', '=', 'driver.id')
         .select(
             'bookings.*',
-            'users.email as userEmail',
-            'users.phone as userPhone',
+            'passenger.email as passengerEmail',
+            'passenger.phone as passengerPhone',
+            'driver.email as driverEmail',
+            'driver.phone as driverPhone',
             'destinations.enddestination',
             'destinations.traveldate',
             'bookings.seats',
@@ -161,22 +177,31 @@ async function getAllBookingsForAnUser(user_id) {
 
 async function getAllBookings() {
     return db('bookings')
-        .join('users', 'bookings.user_id', 'users.id')
-        .join('destinations', 'bookings.destinationId', 'destinations.id')
+        .join('users as passenger', 'bookings.user_id', '=', 'passenger.id')
+        .join('destinations', 'bookings.destinationId', '=', 'destinations.id')
+        .join('users as driver', 'destinations.user_id', '=', 'driver.id')
         .select(
             'bookings.*',
-            'users.email as userEmail',
-            'users.phone as userPhone',
+            'passenger.email as passengerEmail',
+            'passenger.phone as passengerPhone',
+            'driver.email as driverEmail',
+            'driver.phone as driverPhone',
             'destinations.enddestination',
             'destinations.traveldate',
-            'bookings.seats', // Changed from 'destinations.seats'
-            'destinations.arrivalTime'
+            'bookings.seats',
+            'destinations.arrival_time'
         )
         .orderBy('bookings.id', 'desc');
 }
 
 async function getBookingById(id) {
     return db('bookings').where({ id }).first();
+}
+
+async function updateBooking(id, changes) {
+    return db('bookings')
+        .where({ id })
+        .update(changes);
 }
 
 async function deleteBooking(id) {
@@ -205,7 +230,6 @@ module.exports = {
     addUser,
     findUserByEmail,
     removeUser,
-    // getAllDestinations,
     findUserById,
     addDestination,
     removeDestination,
@@ -214,8 +238,8 @@ module.exports = {
     groupDestinations,
     upDateUser,
     getDestinationsByDate,
-    getDestinationsByDateNameSeatsAndArrivalTime,
-    getArrivalTimesByDateAndDestination,
+    // getDestinationsByDateNameSeatsAndArrivalTime,
+    getRoutesByDateAndDestination,
     createBooking,
     getAllBookings,
     getAllBookingsForAnUser,
@@ -226,6 +250,9 @@ module.exports = {
     getTimetable,
     getTimetableByDate,
     updateDestinationSeats,
-    getDestinationById
+    getDestinationById,
+    updateBooking,
+    getDestinationsByDateNameSeatsAndRoute
+
 
 }

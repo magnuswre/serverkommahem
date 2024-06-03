@@ -33,7 +33,7 @@ exports.up = function (knex) {
       tbl.time('arrival_time').notNullable();
       tbl.time('departure_time').notNullable();
       tbl.text('route').notNullable();
-      tbl.integer('IDENT').notNullable();
+      tbl.text('IDENT').notNullable();
       tbl.index(['date', 'arrival_time', 'departure_time', 'route', 'IDENT']);
     })
     .createTable('bookings', tbl => {

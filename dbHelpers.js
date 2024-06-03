@@ -151,7 +151,8 @@ async function getRoutesByDateAndDestination(date, destination) {
 }
 
 async function createBooking(booking) {
-    const [id] = await db('bookings').insert(booking).returning('id');
+    const [result] = await db('bookings').insert(booking).returning('id');
+    const id = result.id;  // Extract the `id` from the returned object
     return db('bookings').where({ id }).first();
 }
 

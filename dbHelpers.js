@@ -225,6 +225,13 @@ function updateDestinationSeats(id, newSeats) {
         .where({ id })
         .update({ seats: newSeats });
 }
+
+async function removeTimeTableItem(id) {
+    return db('timetable')
+        .where({ id })
+        .del();
+}
+
 module.exports = {
     getAllUsers,
     addUser,
@@ -252,7 +259,8 @@ module.exports = {
     updateDestinationSeats,
     getDestinationById,
     updateBooking,
-    getDestinationsByDateNameSeatsAndRoute
+    getDestinationsByDateNameSeatsAndRoute,
+    removeTimeTableItem
 
 
 }

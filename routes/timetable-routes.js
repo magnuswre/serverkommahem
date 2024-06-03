@@ -51,7 +51,10 @@ router.delete('/timetable/delete/:id', (req, res) => {
       .then(timetable => {
          res.status(200).json(timetable);
       })
-      .catch(error => res.status(500).json(error))
+      .catch(error => {
+         console.error(error);
+         res.status(500).json(error)
+      });
 });
 
 

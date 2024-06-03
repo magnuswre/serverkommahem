@@ -64,9 +64,9 @@ exports.up = function (knex) {
 
 exports.down = function (knex) {
   return Promise.all([
-    knex.schema.dropTableIfExists('destinations'),
-    knex.schema.dropTableIfExists('users'),
+    knex.schema.dropTableIfExists('bookings'),
     knex.schema.dropTableIfExists('timetable'),
-    knex.schema.dropTableIfExists('bookings')
+    knex.schema.dropTableIfExists('destinations'),
+    knex.schema.dropTableIfExists('users')
   ]);
 };

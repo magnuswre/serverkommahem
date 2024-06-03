@@ -4,6 +4,16 @@ const Travels = require('../dbHelpers');
 const bcrypt = require('bcryptjs');
 const auth = require('../authentication/auth');
 
+// // SEND EMAIL
+
+// router.get('/sendmail', (req, res) => {
+//    sendEmail()
+//       .then(response => res.send(response.message))
+//       .catch(error => res.status(500).send(error.message))
+// });
+
+
+
 // GET ALL USERS
 router.get('/users', (req, res) => {
    Travels.getAllUsers()
@@ -74,17 +84,57 @@ router.put('/user/:id/password', async (req, res) => {
    }
 });
 
+router.put('/user/:id/reset_password', async (req, res) => {
+   const { id } = req.params;
+   const { newPassword } = req.body;
+
+   try {
+      const user = await Travels.findUserById(id);
+
+      if (!user) {
+         return res.status(404).json({ message: 'User not found' });
+      }
+
+      const hash = bcrypt.hashSync(newPassword, 12);
+      await Travels.upDateUser(id, { password: hash });
+
+      res.status(200).json({ message: 'Password updated successfully' });
+   } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error', error: error.message });
+   }
+});
+
 // GET USER BY EMAIL
 
-router.get('/users/:email', (req, res) => {
-   const { email } = req.params;
+// router.get('/users/:email', (req, res) => {
+//    const { email } = req.params;
+
+//    Travels.findUserByEmail(email)
+//       .then(user => {
+//          if (user) {
+//             res.status(200).json(user);
+//          } else {
+//             res.status(200).json({ userExists: false });
+//          }
+//       })
+//       .catch(error => res.status(500).json(error))
+// });
+
+// USER CHECK:
+
+router.post('/users/check', (req, res) => {
+   const { email } = req.body;
 
    Travels.findUserByEmail(email)
       .then(user => {
-         res.status(200).json(user);
+         if (user) {
+            res.status(200).json({ userExists: true, userId: user.id });
+         } else {
+            res.status(200).json({ userExists: false });
+         }
       })
       .catch(error => res.status(500).json(error))
-
 });
 
 // CHANGE A USER

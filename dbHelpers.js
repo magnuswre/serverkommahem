@@ -209,7 +209,8 @@ async function deleteBooking(id) {
 }
 
 async function addTimetable(timetable) {
-    return db('timetable').insert(timetable);
+    const [id] = await db('timetable').insert(timetable).returning('id');
+    return db('timetable').where({ id }).first();
 }
 
 async function getTimetable() {

@@ -48,7 +48,7 @@ exports.up = function (knex) {
       tbl.integer('user_id')
         .unsigned()
         .references('id')
-        .inTable('destinations')
+        .inTable('users')
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
       tbl.text('status').notNullable().defaultTo('active');

@@ -128,11 +128,11 @@ router.get('/destinationsgrouping', (req, res) => {
 });
 
 
-// GET DESTINATIONS BY DATE, NAME, SEATS AND ARRIVAL TIME
-router.get('/destinations/:traveldate/:enddestination/:seats/:arrivalTime', (req, res) => {
-   const { traveldate, enddestination, seats, arrivalTime } = req.params;
+// GET DESTINATIONS BY DATE, NAME, SEATS AND ....
+router.get('/destinations/:traveldate/:enddestination/:seats/:arrival_time/:departure_time/:route', (req, res) => {
+   const { traveldate, enddestination, seats, arrival_time, departure_time, route } = req.params;
 
-   Travels.getDestinationsByDateNameSeatsAndArrivalTime(traveldate, enddestination, seats, arrivalTime)
+   Travels.getDestinationsByDateNameSeatsAndRoute(traveldate, enddestination, seats, arrival_time, departure_time, route)
       .then(destinations => {
          if (!destinations || destinations.length === 0) {
             res.status(404).json({ message: 'No destinations found for this date, enddestination, seats and arrival time' });
@@ -140,7 +140,7 @@ router.get('/destinations/:traveldate/:enddestination/:seats/:arrivalTime', (req
             const matchingDestinations = destinations.filter(d =>
                d.enddestination.toLowerCase() === enddestination.toLowerCase() &&
                d.seats >= seats &&
-               d.arrivalTime === arrivalTime
+               d.arrival_time === arrival_time
             );
             if (matchingDestinations.length === 0) {
                res.status(404).json({ message: 'No destinations with the provided enddestination, enough seats and arrival time found for this date' });
@@ -155,16 +155,16 @@ router.get('/destinations/:traveldate/:enddestination/:seats/:arrivalTime', (req
       });
 });
 
-// GET ARRIVAL TIMES BY DATE AND DESTINATION
-router.get('/arrivalTimes/:date/:destination', (req, res) => {
+// GET ROUTES TIMES BY DATE AND DESTINATION
+router.get('/routes/:date/:destination', (req, res) => {
    const { date, destination } = req.params;
 
-   Travels.getArrivalTimesByDateAndDestination(date, destination)
-      .then(arrivalTimes => {
-         if (!arrivalTimes || arrivalTimes.length === 0) {
-            res.status(404).json({ message: 'No arrival times found for this date and destination' });
+   Travels.getRoutesByDateAndDestination(date, destination)
+      .then(routes => {
+         if (!routes || routes.length === 0) {
+            res.status(404).json({ message: 'No routes found for this date and destination' });
          } else {
-            res.status(200).json(arrivalTimes);
+            res.status(200).json(routes);
          }
       })
       .catch(error => {

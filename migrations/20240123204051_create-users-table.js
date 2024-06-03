@@ -14,7 +14,9 @@ exports.up = function (knex) {
       tbl.increments();
       tbl.text('enddestination').notNullable().index();
       tbl.text('traveldate').notNullable();
-      tbl.text('arrivalTime').notNullable();
+      tbl.time('arrival_time').notNullable();
+      tbl.time('departure_time').notNullable();
+      tbl.text('route').notNullable();
       tbl.integer('seats').notNullable();
       tbl.timestamps(true, true);
       tbl.integer('user_id')
@@ -39,7 +41,9 @@ exports.up = function (knex) {
       tbl.text('enddestination').notNullable();
       tbl.text('traveldate').notNullable();
       tbl.integer('seats').notNullable();
-      tbl.text('arrivalTime').notNullable();
+      tbl.time('arrival_time').notNullable();
+      tbl.time('departure_time').notNullable();
+      tbl.text('route').notNullable();
       tbl.integer('destinationId').notNullable()
       tbl.integer('user_id')
         .unsigned()
@@ -47,6 +51,7 @@ exports.up = function (knex) {
         .inTable('destinations')
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
+      tbl.text('status').notNullable().defaultTo('active');
       tbl.timestamps(true, true);
     });
 };

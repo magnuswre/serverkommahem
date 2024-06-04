@@ -170,7 +170,7 @@ async function getAllBookingsForAnUser(user_id) {
             'destinations.enddestination',
             'destinations.traveldate',
             'bookings.seats',
-            'destinations.arrivalTime'
+            'destinations.arrival_time'
         )
         .where('bookings.user_id', user_id)
         .orderBy('bookings.id', 'desc');

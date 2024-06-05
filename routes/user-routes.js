@@ -149,12 +149,28 @@ router.patch('/users/:id', (req, res) => {
       .catch(error => res.status(500).json(error))
 });
 
-// DELETE AN USER
+// DELETE AN USER DRIVER
 
-router.delete('/users/:id', (req, res) => {
+router.delete('/usersdriver/:id', (req, res) => {
    const { id } = req.params;
 
-   Travels.removeUser(id)
+   Travels.removeUserDriver(id)
+      .then(count => {
+         if (count > 0) {
+            res.status(200).json({ message: 'User deleted' });
+         } else {
+            res.status(404).json({ message: 'User not found (with that id)' });
+         }
+      })
+      .catch(error => res.status(500).json(error))
+});
+
+// DELETE AN USER PASSENGER
+
+router.delete('/userspassenger/:id', (req, res) => {
+   const { id } = req.params;
+
+   Travels.removeUserPassenger(id)
       .then(count => {
          if (count > 0) {
             res.status(200).json({ message: 'User deleted' });

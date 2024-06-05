@@ -24,9 +24,28 @@ function upDateUser(id, newUser) {
         .update(newUser); // UPDATE destinations SET changes WHERE id = id;
 }
 
-function removeUser(id) {
-    return db('users').where({ id: id }).del(); // DELETE FROM users WHERE id = id; (returns 1 if deleted, -1 if not)
+// function removeUser(id) {
+//     return db('users').where({ id: id }).del(); // DELETE FROM users WHERE id = id; (returns 1 if deleted, -1 if not)
+// }
+
+async function removeUser(id) {
+    // First, get all the user's bookings
+    const bookings = await db('bookings').where({ user_id: id });
+
+    // For each booking, add the number of booked seats back to the destination
+    for (let booking of bookings) {
+        const destination = await db('destinations').where({ id: booking.destinationId }).first();
+        const newSeats = destination.seats + booking.seats;
+        await db('destinations').where({ id: booking.destinationId }).update({ seats: newSeats });
+    }
+
+    // Delete the user's bookings
+    await db('bookings').where({ user_id: id }).del();
+
+    // Then, delete the user
+    return db('users').where({ id: id }).del();
 }
+
 function findUserById(id) {
     return db('users').where({ id: id }).first(); // SELECT * FROM users WHERE id = id;
 }

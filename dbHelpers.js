@@ -28,7 +28,7 @@ function upDateUser(id, newUser) {
 //     return db('users').where({ id: id }).del(); // DELETE FROM users WHERE id = id; (returns 1 if deleted, -1 if not)
 // }
 
-async function removeUser(id) {
+async function removeUserDriver(id) {
     try {
         // First, get all the user's bookings
         const bookings = await db('bookings').where({ user_id: id });
@@ -52,6 +52,36 @@ async function removeUser(id) {
         throw error;
     }
 }
+function findUserById(id) {
+    return db('users').where({ id: id }).first(); // SELECT * FROM users WHERE id = id;
+}
+
+async function removeUserPassenger(id) {
+    try {
+        // First, get all the user's bookings
+        const bookings = await db('bookings').where({ user_id: id });
+
+        // For each booking, add the number of booked seats back to the destination
+        for (let booking of bookings) {
+            const destination = await db('destinations').where({ id: booking.destinationId }).first();
+            if (destination) {
+                const newSeats = destination.seats + booking.seats;
+                await db('destinations').where({ id: booking.destinationId }).update({ seats: newSeats });
+            }
+        }
+
+        // Delete the user's bookings
+        await db('bookings').where({ user_id: id }).del();
+
+        // Then, delete the user
+        return db('users').where({ id: id }).del();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+// FIND USER BY ID
 function findUserById(id) {
     return db('users').where({ id: id }).first(); // SELECT * FROM users WHERE id = id;
 }
@@ -262,7 +292,6 @@ module.exports = {
     getAllUsers,
     addUser,
     findUserByEmail,
-    removeUser,
     findUserById,
     addDestination,
     removeDestination,
@@ -286,7 +315,10 @@ module.exports = {
     getDestinationById,
     updateBooking,
     getDestinationsByDateNameSeatsAndRoute,
-    removeTimeTableItem
+    removeTimeTableItem,
+    removeUserPassenger,
+    removeUserDriver
+
 
 
 }

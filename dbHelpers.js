@@ -52,6 +52,7 @@ async function removeUserDriver(id) {
         throw error;
     }
 }
+
 function findUserById(id) {
     return db('users').where({ id: id }).first(); // SELECT * FROM users WHERE id = id;
 }
@@ -63,10 +64,13 @@ async function removeUserPassenger(id) {
 
         // For each booking, add the number of booked seats back to the destination
         for (let booking of bookings) {
-            const destination = await db('destinations').where({ id: booking.destinationId }).first();
-            if (destination) {
-                const newSeats = destination.seats + booking.seats;
-                await db('destinations').where({ id: booking.destinationId }).update({ seats: newSeats });
+            // Only add the seats back if the booking is not cancelled
+            if (booking.status !== 'cancelled') {
+                const destination = await db('destinations').where({ id: booking.destinationId }).first();
+                if (destination) {
+                    const newSeats = destination.seats + booking.seats;
+                    await db('destinations').where({ id: booking.destinationId }).update({ seats: newSeats });
+                }
             }
         }
 

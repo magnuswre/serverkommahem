@@ -29,23 +29,29 @@ function upDateUser(id, newUser) {
 // }
 
 async function removeUser(id) {
-    // First, get all the user's bookings
-    const bookings = await db('bookings').where({ user_id: id });
+    try {
+        // First, get all the user's bookings
+        const bookings = await db('bookings').where({ user_id: id });
 
-    // For each booking, add the number of booked seats back to the destination
-    for (let booking of bookings) {
-        const destination = await db('destinations').where({ id: booking.destinationId }).first();
-        const newSeats = destination.seats + booking.seats;
-        await db('destinations').where({ id: booking.destinationId }).update({ seats: newSeats });
+        // For each booking, add the number of booked seats back to the destination
+        for (let booking of bookings) {
+            const destination = await db('destinations').where({ id: booking.destinationId }).first();
+            if (destination) {
+                const newSeats = destination.seats + booking.seats;
+                await db('destinations').where({ id: booking.destinationId }).update({ seats: newSeats });
+            }
+        }
+
+        // Delete the user's bookings
+        await db('bookings').where({ user_id: id }).del();
+
+        // Then, delete the user
+        return db('users').where({ id: id }).del();
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
-
-    // Delete the user's bookings
-    await db('bookings').where({ user_id: id }).del();
-
-    // Then, delete the user
-    return db('users').where({ id: id }).del();
 }
-
 function findUserById(id) {
     return db('users').where({ id: id }).first(); // SELECT * FROM users WHERE id = id;
 }

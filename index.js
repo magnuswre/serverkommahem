@@ -14,7 +14,19 @@ const destinationsRouter = require('./routes/destination-routes');
 const timetableRouter = require('./routes/timetable-routes');
 const bookingsRouter = require('./routes/booking-routes');
 
-function sendEmail({ recipient_email, OTP, type, date, destination, booking_id }) {
+function sendEmail({
+   recipient_email,
+   OTP,
+   type,
+   traveldate,
+   enddestination,
+   seats,
+   arrival_time,
+   departure_time,
+   route,
+   user_id,
+   destinationId
+}) {
    return new Promise((resolve, reject) => {
       var transporter = nodemailer.createTransport({
          service: 'gmail',
@@ -78,10 +90,15 @@ function sendEmail({ recipient_email, OTP, type, date, destination, booking_id }
                  </div>
        
                 <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">Bokningsinformation</h2>
-                 <p>Datum: ${date}</p>
-                <p>Destination: ${destination}</p>
-                <p>Bookingsid: ${booking_id}</p>
-                <p style="font-size:0.9em;">Kommahem.se</p>
+                 <p>Datum: ${traveldate}</p>
+                 <p>Destination: ${enddestination}</p>
+                 <p>Bookingsid: ${destinationId}</p>
+                 <p>Antal platser: ${seats}</p>
+                 <p>Ankomsttid: ${arrival_time}</p>
+                 <p>Avresetid: ${departure_time}</p>
+                 <p>Rutt: ${route}</p>
+                 <p>Användarid: ${user_id}</p>
+                 <p style="font-size:0.9em;">Kommahem.se</p>
                 <hr style="border:none;border-top:1px solid #eee" />
                 <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
                 <p>Kommahem.se</p>

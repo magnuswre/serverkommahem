@@ -14,7 +14,7 @@ const destinationsRouter = require('./routes/destination-routes');
 const timetableRouter = require('./routes/timetable-routes');
 const bookingsRouter = require('./routes/booking-routes');
 
-function sendEmail({ recipient_email, OTP, type }) {
+function sendEmail({ recipient_email, OTP, type, date, destination, booking_id }) {
    return new Promise((resolve, reject) => {
       var transporter = nodemailer.createTransport({
          service: 'gmail',
@@ -47,6 +47,9 @@ function sendEmail({ recipient_email, OTP, type }) {
        
                 <p>Use the following OTP to complete your Password Recovery Procedure.</p>
                 <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${OTP}</h2>
+                <p>Datum: ${date}</p>
+                <p>Destination: ${destination}</p>
+                <p>Bookingsid: ${booking_id}</p>
                 <p style="font-size:0.9em;">Kommahem.se</p>
                 <hr style="border:none;border-top:1px solid #eee" />
                 <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
@@ -62,12 +65,12 @@ function sendEmail({ recipient_email, OTP, type }) {
          mail_configs = {
             from: process.env.EMAIL_USER,
             to: recipient_email,
-            subject: "Booking Confirmation Kommahem",
+            subject: "Bokningsbekräftelse Kommahem",
             html: `<!DOCTYPE html>
             <html lang="en">
              <head>
                 <meta charset="UTF-8">
-                <title>Booking Confirmation Kommahem</title>
+                <title>Bokningsbekräftelse Kommahem</title>
               </head>
              <body>
              <!-- partial:index.partial.html -->
@@ -77,7 +80,7 @@ function sendEmail({ recipient_email, OTP, type }) {
                   <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">Kommahem.se</a>
                  </div>
        
-                <p>Your booking has been confirmed. Here are the details of your booking:</p>
+                <p>Här är detaljerna för din bokning</p>
                 <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">Booking Details</h2>
                 <p style="font-size:0.9em;">Kommahem.se</p>
                 <hr style="border:none;border-top:1px solid #eee" />

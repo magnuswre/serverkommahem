@@ -28,12 +28,12 @@ function sendEmail({ recipient_email, OTP }) {
       const mail_configs = {
          from: process.env.EMAIL_USER,
          to: recipient_email,
-         subject: "KODING 101 PASSWORD RECOVERY",
+         subject: "Återställning lösenord Kommahem",
          html: `<!DOCTYPE html>
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>CodePen - OTP Email Template</title>
+  <title>Återställning lösenord Kommahem</title>
   
 
 </head>
@@ -47,12 +47,10 @@ function sendEmail({ recipient_email, OTP }) {
     
     <p>Kommahem. Use the following OTP to complete your Password Recovery Procedure. OTP is valid for 5 minutes</p>
     <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${OTP}</h2>
-    <p style="font-size:0.9em;">Regards,<br />Koding 101</p>
+    <p style="font-size:0.9em;">Regards,<br />Kommahem</p>
     <hr style="border:none;border-top:1px solid #eee" />
     <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
-      <p>Koding 101 Inc</p>
-      <p>1600 Amphitheatre Parkway</p>
-      <p>California</p>
+      <p>Kommahem.se</p>
     </div>
   </div>
 </div>

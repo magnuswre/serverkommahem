@@ -47,9 +47,6 @@ function sendEmail({ recipient_email, OTP, type, date, destination, booking_id }
        
                 <p>Use the following OTP to complete your Password Recovery Procedure.</p>
                 <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${OTP}</h2>
-                <p>Datum: ${date}</p>
-                <p>Destination: ${destination}</p>
-                <p>Bookingsid: ${booking_id}</p>
                 <p style="font-size:0.9em;">Kommahem.se</p>
                 <hr style="border:none;border-top:1px solid #eee" />
                 <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
@@ -80,8 +77,10 @@ function sendEmail({ recipient_email, OTP, type, date, destination, booking_id }
                   <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">Kommahem.se</a>
                  </div>
        
-                <p>Här är detaljerna för din bokning</p>
-                <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">Booking Details</h2>
+                <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">Bokningsinformation</h2>
+                 <p>Datum: ${date}</p>
+                <p>Destination: ${destination}</p>
+                <p>Bookingsid: ${booking_id}</p>
                 <p style="font-size:0.9em;">Kommahem.se</p>
                 <hr style="border:none;border-top:1px solid #eee" />
                 <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">

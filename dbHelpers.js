@@ -82,7 +82,15 @@ function getUserDestinations(user_id) {
             'destinations.id as DestinationId',
             'destinations.enddestination as EndDestination',
             'destinations.traveldate as DestinationTravelDate', // added
-            'destinations.seats as DestinationSeats' // added
+            'destinations.seats as DestinationSeats', // added
+            'destinations.arrival_time as ArrivalTime',
+            'destinations.departure_time as DepartureTime',
+            'destinations.route as Route',
+            'destinations.created_at as CreatedAt',
+            'destinations.updated_at as UpdatedAt',
+            'destinations.user_id as UserId',
+            'users.email as userEmail',
+            'users.phone as userPhone'
         )
         .where({ user_id: user_id });
 }

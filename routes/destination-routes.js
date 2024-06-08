@@ -2,23 +2,32 @@ const express = require('express');
 const router = express.Router();
 const Travels = require('../dbHelpers');
 
-// // GET ALL DESTINATIONS
+// GET ALL DESTINATIONS 
 
-// router.get('/destinations/all', (req, res) => {
-//    Travels.getAllDestinations()
-//       .then(destinations => {
-//          res.status(200).json(destinations);
-//       })
-//       .catch(error => res.status(500).json(error))
-// })
-
-// GET ALL DESTINATIONS WITH USER DETAILS
 router.get('/destinations/all', (req, res) => {
    Travels.getAllDestinationsWithUserDetails()
       .then(destinations => {
          res.status(200).json(destinations);
       })
       .catch(error => res.status(500).json(error));
+});
+
+// GET DESTINATIONS BY USER ID
+router.get('/users/:id/destinations', (req, res) => {
+   const { id } = req.params;
+
+   Travels.getUserDestinations(id)
+      .then(destinations => {
+         if (!destinations || destinations.length === 0) {
+            res.status(404).json({ message: 'No destinations found for this user' });
+         } else {
+            res.status(200).json(destinations);
+         }
+      })
+      .catch(error => {
+         console.error(error);
+         res.status(500).json({ message: 'Internal server error', error: error.message });
+      });
 });
 
 // CREATE A NEW DESTINATION
@@ -78,6 +87,7 @@ router.patch('/destinations/:id', (req, res) => {
 });
 
 // GET DESTINATION BY DATE
+
 router.get('/destinations/:traveldate?', (req, res) => {
    const { traveldate } = req.params;
 
@@ -91,7 +101,7 @@ router.get('/destinations/:traveldate?', (req, res) => {
       .catch(error => res.status(500).json(error));
 });
 
-// // GET DESTINATION BY CHOSEN DATE
+// GET DESTINATION BY CHOSEN DATE
 
 router.get('/destinations/chosen/:traveldate', (req, res) => {
    const { traveldate } = req.params;
@@ -172,7 +182,7 @@ router.get('/routes/:date/:destination', (req, res) => {
          res.status(500).json({ message: 'Internal server error', error: error.message });
       });
 });
-
+getDestinationsByUserId
 
 
 module.exports = router;

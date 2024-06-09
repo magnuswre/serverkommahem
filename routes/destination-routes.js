@@ -182,7 +182,6 @@ router.get('/routes/:date/:destination', (req, res) => {
          res.status(500).json({ message: 'Internal server error', error: error.message });
       });
 });
-getDestinationsByUserId
 
 
 module.exports = router;

@@ -243,4 +243,4 @@ router.get('/users/:id/destinations', (req, res) => { // get all destinations fo
       .catch(error => res.status(500).json(error))
 })
 
-module.exports = router;   
+module.exports = router;

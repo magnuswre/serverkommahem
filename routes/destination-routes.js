@@ -36,26 +36,29 @@ router.post('/users/:id/destinations', (req, res) => {
    const { id } = req.params;
    const newDestination = req.body;
    newDestination['user_id'] = id; // add user_id to newDestination object
-   console.log(newDestination)
+
+   console.log(newDestination);
 
    Travels.findUserById(id)
       .then(user => {
          if (!user) {
-            res.status(404).json({ message: 'User not found' })
+            res.status(404).json({ message: 'User not found' });
          } else {
-            if (!newDestination.enddestination || !newDestination.traveldate || !newDestination.seats) {
-               res.status(400).json({ message: 'Please provide title and description' })
+            const requiredFields = ['enddestination', 'traveldate', 'seats', 'original_seats'];
+            const missingFields = requiredFields.filter(field => !newDestination[field]);
+
+            if (missingFields.length > 0) {
+               res.status(400).json({ message: `Please provide ${missingFields.join(', ')}` });
             } else {
                Travels.addDestination(newDestination)
                   .then(destination => {
                      res.status(200).json(destination);
-
                   })
-                  .catch(error => res.status(500).json(error))
+                  .catch(error => res.status(500).json({ error: 'Error adding destination', details: error }));
             }
          }
       })
-      .catch(error => res.status(500).json(error))
+      .catch(error => res.status(500).json({ error: 'Error finding user', details: error }));
 });
 
 // DELETE A DESTINATION
@@ -175,6 +178,24 @@ router.get('/routes/:date/:destination', (req, res) => {
             res.status(404).json({ message: 'No routes found for this date and destination' });
          } else {
             res.status(200).json(routes);
+         }
+      })
+      .catch(error => {
+         console.error(error);
+         res.status(500).json({ message: 'Internal server error', error: error.message });
+      });
+});
+
+// GET BOOKINGS FOR A SPECIFIC DESTINATION
+router.get('/destinations/:id/bookings', (req, res) => {
+   const { id } = req.params;
+
+   Travels.getBookingsForDestination(id)
+      .then(bookings => {
+         if (!bookings || bookings.length === 0) {
+            res.status(404).json({ message: 'No bookings found for this destination' });
+         } else {
+            res.status(200).json(bookings);
          }
       })
       .catch(error => {

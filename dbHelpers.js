@@ -83,6 +83,7 @@ function getUserDestinations(user_id) {
             'destinations.enddestination as EndDestination',
             'destinations.traveldate as DestinationTravelDate', // added
             'destinations.seats as DestinationSeats', // added
+            'destinations.original_seats as OriginalSeats', // added
             'destinations.arrival_time as ArrivalTime',
             'destinations.departure_time as DepartureTime',
             'destinations.route as Route',
@@ -281,6 +282,15 @@ async function removeTimeTableItem(id) {
         .del();
 }
 
+
+function getBookingsForDestination(destinationId) {
+    return db('bookings')
+        .join('users', 'bookings.user_id', 'users.id')
+        .select('bookings.*', 'users.email', 'users.phone')
+        .where('bookings.destinationId', destinationId);
+}
+
+
 module.exports = {
     getAllUsers,
     addUser,
@@ -310,8 +320,6 @@ module.exports = {
     getDestinationsByDateNameSeatsAndRoute,
     removeTimeTableItem,
     removeUserPassenger,
-    removeUserDriver
-
-
-
+    removeUserDriver,
+    getBookingsForDestination
 }

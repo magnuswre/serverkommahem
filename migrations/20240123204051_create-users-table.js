@@ -17,6 +17,7 @@ exports.up = function (knex) {
       tbl.time('arrival_time').notNullable();
       tbl.time('departure_time').notNullable();
       tbl.text('route').notNullable();
+      tbl.integer('original_seats').notNullable();
       tbl.integer('seats').notNullable();
       tbl.timestamps(true, true);
       tbl.integer('user_id')

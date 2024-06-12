@@ -16,6 +16,7 @@ const bookingsRouter = require('./routes/booking-routes');
 
 function sendEmail({
    recipient_email,
+   destination_owner_email,
    OTP,
    type,
    traveldate,
@@ -25,7 +26,8 @@ function sendEmail({
    departure_time,
    route,
    user_id,
-   destinationId
+   destinationId,
+   recipient_phone
 }) {
    return new Promise((resolve, reject) => {
       var transporter = nodemailer.createTransport({
@@ -120,6 +122,24 @@ function sendEmail({
             resolve({ message: `Email sent` });
          }
       });
+
+      // Send booking notification to the destination owner
+      if (destination_owner_email && type === 'booking_confirmation') {
+         let owner_mail_configs = {
+            from: process.env.EMAIL_USER,
+            to: destination_owner_email,
+            subject: "Your destination has been booked",
+            text: `Hi, your destination to ${enddestination} is booked by user ${recipient_email} with this number ${recipient_phone}`
+         };
+
+         transporter.sendMail(owner_mail_configs, function (error, info) {
+            if (error) {
+               console.log(error);
+            } else {
+               console.log('Email sent to destination owner: ' + info.response);
+            }
+         });
+      }
    });
 }
 
@@ -137,7 +157,7 @@ app.post("/send_recovery_email", (req, res) => {
 });
 
 app.post("/send_booking_confirmation", (req, res) => {
-   sendEmail({ ...req.body, type: 'booking_confirmation' })
+   sendEmail({ ...req.body, type: 'booking_confirmation', destination_owner_email: 'destination_owner@example.com' }) // replace with actual destination owner email
       .then((response) => res.json({ message: response.message }))
       .catch((error) => res.status(500).json({ error: error.message }));
 });
@@ -146,11 +166,6 @@ app.use('/', usersRouter);
 app.use('/', destinationsRouter);
 app.use('/', timetableRouter);
 app.use('/', bookingsRouter);
-
-// WELCOME PAGE
-// app.get('/', (req, res) => {
-//    res.json({ message: 'Welcome to server' })
-// });
 
 app.listen(port, () => {
    console.log(`Server running on port http://localhost:${port}`);

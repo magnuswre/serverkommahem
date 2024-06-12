@@ -157,7 +157,7 @@ app.post("/send_recovery_email", (req, res) => {
 });
 
 app.post("/send_booking_confirmation", (req, res) => {
-   sendEmail({ ...req.body, type: 'booking_confirmation', destination_owner_email: 'destination_owner@example.com' }) // replace with actual destination owner email
+   sendEmail({ ...req.body, type: 'booking_confirmation', destination_owner_email: req.body.destination_owner_email }) // replace with actual destination owner email
       .then((response) => res.json({ message: response.message }))
       .catch((error) => res.status(500).json({ error: error.message }));
 });

@@ -8,6 +8,19 @@ exports.up = function (knex) {
     tbl.text('email', 120).notNullable().unique().index();
     tbl.text('password', 200).notNullable();
     tbl.text('phone', 128).notNullable();
+    tbl.text('first_name', 128);
+    tbl.text('last_name', 128);
+    tbl.date('date_of_birth');
+    tbl.text('gender', 10);
+    tbl.text('profile_picture');
+    tbl.text('address', 120);
+    tbl.text('city', 120);
+    tbl.text('state', 120);
+    tbl.text('country', 120);
+    tbl.text('zip_code', 20);
+    tbl.text('message');
+    tbl.text('comment');
+    tbl.text('role', 128).defaultTo('user');
     tbl.timestamps(true, true);
   })
     .createTable('destinations', tbl => {
@@ -19,6 +32,10 @@ exports.up = function (knex) {
       tbl.text('route').notNullable();
       tbl.integer('original_seats').notNullable();
       tbl.integer('seats').notNullable();
+      tbl.integer('price').notNullable();
+      tbl.text('status').defaultTo('active');
+      tbl.text('message');
+      tbl.text('comment');
       tbl.timestamps(true, true);
       tbl.integer('user_id')
         .notNullable()
@@ -45,6 +62,8 @@ exports.up = function (knex) {
       tbl.time('arrival_time').notNullable();
       tbl.time('departure_time').notNullable();
       tbl.text('route').notNullable();
+      tbl.text('message');
+      tbl.text('comment');
       tbl.integer('destinationId').notNullable()
       tbl.integer('user_id')
         .unsigned()

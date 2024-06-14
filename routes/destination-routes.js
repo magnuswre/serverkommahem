@@ -44,7 +44,7 @@ router.post('/users/:id/destinations', (req, res) => {
          if (!user) {
             res.status(404).json({ message: 'User not found' });
          } else {
-            const requiredFields = ['enddestination', 'traveldate', 'seats', 'original_seats'];
+            const requiredFields = ['enddestination', 'traveldate', 'seats', 'original_seats', 'price'];
             const missingFields = requiredFields.filter(field => !newDestination[field]);
 
             if (missingFields.length > 0) {

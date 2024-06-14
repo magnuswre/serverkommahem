@@ -68,25 +68,24 @@ async function removeUserPassenger(id) {
 
 // FIND USER BY ID
 function findUserById(id) {
-    return db('users').where({ id: id }).first(); // SELECT * FROM users WHERE id = id;
+    return db('users').where({ id: id }).first();
 }
-
-// JOINS Frontend can use this to get all destinations for an user
 
 function getUserDestinations(user_id) {
     return db('users')
         .join('destinations', 'users.id', 'destinations.user_id')
         .select(
-            'users.id as UserId', // alias 
-            'users.phone as UserPhone', // alias
+            'users.id as UserId',
+            'users.phone as UserPhone',
             'destinations.id as DestinationId',
             'destinations.enddestination as EndDestination',
-            'destinations.traveldate as DestinationTravelDate', // added
-            'destinations.seats as DestinationSeats', // added
-            'destinations.original_seats as OriginalSeats', // added
+            'destinations.traveldate as DestinationTravelDate',
+            'destinations.seats as DestinationSeats',
+            'destinations.original_seats as OriginalSeats',
             'destinations.arrival_time as ArrivalTime',
             'destinations.departure_time as DepartureTime',
             'destinations.route as Route',
+            'destinations.price as Price',
             'destinations.created_at as CreatedAt',
             'destinations.updated_at as UpdatedAt',
             'destinations.user_id as UserId',
@@ -98,10 +97,6 @@ function getUserDestinations(user_id) {
 
 
 // DESTINATIONS
-
-// function getAllDestinations() {
-//     return db('destinations').orderBy('id', 'desc'); // SELECT * FROM destinations ORDER BY id DESC;
-// }
 
 async function getAllDestinationsWithUserDetails() {
     return db('destinations')
@@ -123,19 +118,18 @@ async function addDestination(newDestination) {
 function removeDestination(id) {
     return db('destinations')
         .where({ id: id })
-        .del(); // DELETE FROM destinations WHERE id = id; (returns 1 if deleted, -1 if not)
+        .del();
 }
 
 function upDateDestination(id, newDestination) {
     return db('destinations')
         .where({ id: id })
-        .update(newDestination); // UPDATE destinations SET changes WHERE id = id;
+        .update(newDestination);
 }
 
 
 function getDestinationsByDate(travelDate) {
     if (!travelDate) {
-        // If no travelDate is provided, default to current date
         travelDate = getCurrentDate();
     }
 
@@ -145,7 +139,7 @@ function getDestinationsByDate(travelDate) {
 }
 
 function getDestinationById(id) {
-    return db('destinations').where({ id: id }).first(); // SELECT * FROM destinations WHERE id = id;
+    return db('destinations').where({ id: id }).first();
 }
 // GROUPING
 
@@ -156,24 +150,6 @@ function groupDestinations() {
         .groupBy('enddestination')
         .debug();
 }
-
-// function getDestinationsByDateNameSeatsAndArrivalTime(traveldate, enddestination, seats, arrivalTime) {
-//     return db('destinations')
-//         .where('traveldate', traveldate)
-//         .andWhere('enddestination', 'like', `%${enddestination}%`)
-//         .andWhere('seats', '>=', seats)
-//         .andWhere('arrivalTime', arrivalTime)
-//         .orderBy('traveldate', 'asc');
-// }
-
-// async function getDestinationsByDateNameSeatsAndArrivalTime(traveldate, enddestination, seats, arrivalTime) {
-//     return db('destinations')
-//         .where('traveldate', traveldate)
-//         .andWhere('enddestination', 'like', `%${enddestination}%`)
-//         .andWhere('seats', '>=', seats)
-//         .andWhere('arrivalTime', arrivalTime)
-//         .orderBy('traveldate', 'asc');
-// }
 
 async function getDestinationsByDateNameSeatsAndRoute(traveldate, enddestination, seats, arrival_time, departure_time, route) {
     return db('destinations')
@@ -219,7 +195,8 @@ async function getAllBookingsForAnUser(user_id) {
             'destinations.enddestination',
             'destinations.traveldate',
             'bookings.seats',
-            'destinations.arrival_time'
+            'destinations.arrival_time',
+            'destinations.price',
         )
         .where('bookings.user_id', user_id)
         .orderBy('bookings.id', 'desc');
@@ -239,7 +216,8 @@ async function getAllBookings() {
             'destinations.enddestination',
             'destinations.traveldate',
             'bookings.seats',
-            'destinations.arrival_time'
+            'destinations.arrival_time',
+            'destinations.price',
         )
         .orderBy('bookings.id', 'desc');
 }
@@ -303,7 +281,6 @@ module.exports = {
     groupDestinations,
     upDateUser,
     getDestinationsByDate,
-    // getDestinationsByDateNameSeatsAndArrivalTime,
     getRoutesByDateAndDestination,
     createBooking,
     getAllBookings,

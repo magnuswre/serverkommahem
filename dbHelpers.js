@@ -168,6 +168,7 @@ async function getRoutesByDateAndDestination(date, destination) {
     const arrivalTimes = await db('destinations')
         .where('traveldate', date)
         .andWhere('enddestination', 'like', `%${destination}%`)
+        .andWhere('seats', '>', 0)
         .select('id', 'traveldate as date', 'arrival_time', 'departure_time', 'route')
         .orderBy('arrival_time', 'asc');
     return arrivalTimes.filter((arrivalTime, index, self) => index === self.findIndex((t) => (
